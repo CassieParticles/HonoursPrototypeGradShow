@@ -51,7 +51,7 @@ void MarchingSquaresObject::Update()
 MSDrawableObject* MarchingSquaresObject::MakeDrawable()
 {
     ZoneScoped
-    MSDrawableObject* obj = new MSDrawableObject(transform.GetPositionSf(),sf::Mouse::Button::Right,voxelGrid,-1.0f);
+    MSDrawableObject* obj = new MSDrawableObject(transform,sf::Mouse::Button::Right,voxelGrid,-1.0f);
 
     //Get the physics object, then mark it as something that shouldn't be cleared up (it's being moved)
     obj->AddPhysicsStore(physics.getBody());
@@ -115,6 +115,7 @@ void MarchingSquaresObject::Generate(bool dynamic)
         voxelGrid->setX(0);
         voxelGrid->setY(0);
     }
+    //transform.SetRotation(voxelGrid->getAngle());
 
     int width = voxelGrid->getWidth();
     int height = voxelGrid->getHeight();

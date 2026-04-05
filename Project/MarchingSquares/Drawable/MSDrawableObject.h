@@ -10,6 +10,7 @@ class MSDrawableObject: public GameObject
 public:
     MSDrawableObject(sf::Vector2f mousePosition, sf::Mouse::Button buttonListening,float value);
     MSDrawableObject(sf::Vector2f mousePosition, sf::Mouse::Button buttonListening, VoxelGrid* grid,float value);
+    MSDrawableObject(Transform& transform, sf::Mouse::Button buttonListening, VoxelGrid* grid, float value);
     ~MSDrawableObject();
 
     void TakeInput(InputHandler* input) override;

@@ -24,9 +24,12 @@ public:
 
     [[nodiscard]]int getX() const { return x; }
     [[nodiscard]]int getY() const { return y; }
+    [[nodiscard]]float getAngle() const { return angle; }
 
     void setX(int x){this->x = x;}
     void setY(int y){this->y = y;}
+
+    void setAngle(float angle){this->angle = angle;}
 
     void PrintValues();
     void AddBorder(float defaultValue = 0.0f);
@@ -49,4 +52,7 @@ private:
     //Local position of top left corner
     int x;
     int y;
+
+    //Rotation of the grid
+    float angle;
 };

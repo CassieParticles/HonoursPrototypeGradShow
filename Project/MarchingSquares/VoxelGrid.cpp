@@ -5,12 +5,12 @@
 #include <SFML/Graphics.hpp>
 #include <tracy/Tracy.hpp>
 
-VoxelGrid::VoxelGrid(): width(1),height(1),x(0),y(0),voxelGrid(new float[1])
+VoxelGrid::VoxelGrid(): width(1),height(1),x(0),y(0),voxelGrid(new float[1]), angle(0)
 {
     voxelGrid[0] = -1.0f;
 }
 
-VoxelGrid::VoxelGrid(float* data, int width, int height, int x, int y): width(width), height(height), x(x), y(y)
+VoxelGrid::VoxelGrid(float* data, int width, int height, int x, int y): width(width), height(height), x(x), y(y), angle(0)
 {
     if(data!=nullptr)
     {
@@ -171,6 +171,14 @@ void VoxelGrid::AddBorder(float defaultValue)
 void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
 {
     ZoneScoped
+    //Transform position based on angle
+    sf::Vector2f origin = {static_cast<float>(x),static_cast<float>(y)};
+    sf::Vector2f direction = position - origin;
+    float c = cos(-angle);
+    float s = sin(-angle);
+    sf::Vector2f rotated = {direction.x * c - direction.y * s,direction.x * s + direction.y * c};
+    position = rotated + origin;
+
     //If point is out of bounds, extend the grid
     sf::Vector2i lowerBound = sf::Vector2i{x,y};
     sf::Vector2i upperBound = sf::Vector2i{x+width,y+height};

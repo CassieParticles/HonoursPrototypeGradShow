@@ -48,7 +48,7 @@ Application::Application():controller{&camera}
     Transform transform;
     transform.SetPosition(0,0);
 
-    MSManager.Add(grid,20,20,true,transform);
+    //MSManager.Add(grid,20,20,true,transform);
 
     floorObj.Init();
 
