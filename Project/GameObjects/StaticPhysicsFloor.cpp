@@ -1,7 +1,7 @@
 ﻿#include "StaticPhysicsFloor.h"
 
 #include <Physics/PhysicsWorld.h>
-StaticPhysicsFloor::StaticPhysicsFloor():GameObject(),renderable(&transform,sf::Color::Magenta) {}
+StaticPhysicsFloor::StaticPhysicsFloor():GameObject(),renderable(&transform,sf::Color::Black) {}
 
 void StaticPhysicsFloor::Init()
 {

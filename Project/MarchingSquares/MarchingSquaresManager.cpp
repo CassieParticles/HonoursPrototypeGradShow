@@ -1,6 +1,8 @@
 ﻿#include "MarchingSquaresManager.h"
 
 #include <Core/InputHandler.h>
+#include <tracy/Tracy.hpp>
+
 #include "Object/MarchingSquaresObject.h"
 #include "Drawable/MSDrawableObject.h"
 
@@ -18,6 +20,7 @@ MarchingSquaresManager::~MarchingSquaresManager()
 
 void MarchingSquaresManager::Add(float* data, int width, int height, bool dynamic, Transform& transform)
 {
+    ZoneScoped
     MarchingSquaresObject* obj = new MarchingSquaresObject();
     obj->SetGrid(data,width,height);
     obj->SetDynamic(dynamic);
@@ -33,6 +36,7 @@ void MarchingSquaresManager::Add(float* data, int width, int height, bool dynami
 
 void MarchingSquaresManager::Add(VoxelGrid* data, bool dynamic, Transform& transform)
 {
+    ZoneScoped
     MarchingSquaresObject* obj = new MarchingSquaresObject();
     obj->SetGrid(data);
     obj->SetDynamic(dynamic);

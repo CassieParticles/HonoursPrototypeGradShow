@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stack>
 #include <SFML/Graphics.hpp>
+#include <tracy/Tracy.hpp>
 
 VoxelGrid::VoxelGrid(): width(1),height(1),x(0),y(0),voxelGrid(new float[1])
 {
@@ -25,6 +26,7 @@ VoxelGrid::~VoxelGrid()
 
 VoxelGrid* VoxelGrid::Separate(int x, int y, int width, int height)
 {
+    ZoneScoped;
     VoxelGrid* newGrid = new VoxelGrid();
 
     newGrid->width = width;
@@ -43,6 +45,7 @@ VoxelGrid* VoxelGrid::Separate(int x, int y, int width, int height)
 
 std::vector<VoxelGrid*> VoxelGrid::GetSubgrids()
 {
+    ZoneScoped;
     std::vector<VoxelGrid*> subgrids;
     //Create copy of the grid to check(this may be expensive)
     //Iterate through grid until +ve value reached
@@ -73,6 +76,7 @@ std::vector<VoxelGrid*> VoxelGrid::GetSubgrids()
 
 VoxelGrid* VoxelGrid::CreateSubgrid(int x, int y, float* gridCopy)
 {
+    ZoneScoped
     std::stack<sf::Vector2i> checkList;
     std::stack<sf::Vector2i> points;
     sf::Vector2i lowerBound{x,y};
@@ -155,6 +159,7 @@ void VoxelGrid::PrintValues()
 
 void VoxelGrid::AddBorder(float defaultValue)
 {
+    ZoneScoped
     AddColumnLeft(defaultValue);
     AddColumnRight(defaultValue);
     AddRowTop(defaultValue);
@@ -165,6 +170,7 @@ void VoxelGrid::AddBorder(float defaultValue)
 
 void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
 {
+    ZoneScoped
     //If point is out of bounds, extend the grid
     sf::Vector2i lowerBound = sf::Vector2i{x,y};
     sf::Vector2i upperBound = sf::Vector2i{x+width,y+height};
@@ -223,6 +229,7 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
 
 void VoxelGrid::AddColumnLeft(float defaultValue)
 {
+    ZoneScoped
     float* newArr = new float[(width + 1) * height];
 
     //Copy old data (one row at a time)
@@ -243,6 +250,7 @@ void VoxelGrid::AddColumnLeft(float defaultValue)
 
 void VoxelGrid::AddColumnRight(float defaultValue)
 {
+    ZoneScoped
     float* newArr = new float[(width + 1) * height];
 
     //Copy old data(one row at a time)
@@ -262,6 +270,7 @@ void VoxelGrid::AddColumnRight(float defaultValue)
 
 void VoxelGrid::AddRowTop(float defaultValue)
 {
+    ZoneScoped
     //Create larger array
     float* newArr = new float[width * (height + 1)];
 
@@ -284,6 +293,7 @@ void VoxelGrid::AddRowTop(float defaultValue)
 
 void VoxelGrid::AddRowBottom(float defaultValue)
 {
+    ZoneScoped
     //Create larger array
     float* newArr = new float[width * (height + 1)];
 

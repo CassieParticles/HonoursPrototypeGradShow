@@ -1,6 +1,8 @@
 ﻿#include "MarchingSquaresPhysics.h"
 
+#include <iostream>
 #include <Physics/PhysicsWorld.h>
+#include <tracy/Tracy.hpp>
 
 #include "../Triangle.h"
 
@@ -21,6 +23,7 @@ void MarchingSquaresPhysics::MSPhysicsBuilder::SetDynamic(bool isDynamic) {this-
 
 void MarchingSquaresPhysics::MSPhysicsBuilder::Build()
 {
+    ZoneScopedN("BuildPhysics")
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.position = object->transform->GetPositionb2();
     bodyDef.rotation = object->transform->GetRotationb2();
@@ -39,11 +42,14 @@ void MarchingSquaresPhysics::MSPhysicsBuilder::Build()
             {triangle.C.x,triangle.C.y}
         };
 
+
         b2Hull hull = b2ComputeHull(points,3);
         b2Polygon polygon = b2MakePolygon(&hull,0);
 
         object->shapes.push_back(b2CreatePolygonShape(object->bodyId,&shapeDef,&polygon));
     }
+
+    std::cout<<"Triangle count"<<triangles.size()<<std::endl;
 }
 
 MarchingSquaresPhysics::MSPhysicsBuilder::MSPhysicsBuilder(MarchingSquaresPhysics* object):object(object),isDynamic(false) {}

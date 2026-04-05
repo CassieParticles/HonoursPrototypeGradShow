@@ -1,5 +1,7 @@
 ﻿#include "MarchingSquaresRenderable.h"
 
+#include <tracy/Tracy.hpp>
+
 #include "../Triangle.h"
 
 MarchingSquaresRenderable::MarchingSquaresRenderable(Transform* transform):BaseRenderable(transform)
@@ -23,6 +25,7 @@ MarchingSquaresRenderable::MSRenderableBuilder::MSRenderableBuilder(MarchingSqua
 
 void MarchingSquaresRenderable::MSRenderableBuilder::Build()
 {
+    ZoneScopedN("BuildRenderable")
     //Set the size of the vertex array
     renderable->triangles.clear();
     renderable->triangles.resize(triangles.size() * 3);
@@ -32,6 +35,9 @@ void MarchingSquaresRenderable::MSRenderableBuilder::Build()
         renderable->triangles[i * 3 + 0].position = triangles[i].A;
         renderable->triangles[i * 3 + 1].position = triangles[i].B;
         renderable->triangles[i * 3 + 2].position = triangles[i].C;
+        renderable->triangles[i * 3 + 0].color = sf::Color::Blue;
+        renderable->triangles[i * 3 + 1].color = sf::Color::Blue;
+        renderable->triangles[i * 3 + 2].color = sf::Color::Blue;
     }
 }
 

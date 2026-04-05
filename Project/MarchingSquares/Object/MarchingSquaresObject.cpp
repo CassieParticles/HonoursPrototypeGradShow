@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../Triangle.h"
+#include <tracy/Tracy.hpp>
 
 MarchingSquaresObject::MarchingSquaresObject():voxelGrid(nullptr), isDynamic(false),renderable(&transform),physics(&transform),shouldntDestroy(false)
 {
@@ -49,6 +50,7 @@ void MarchingSquaresObject::Update()
 
 MSDrawableObject* MarchingSquaresObject::MakeDrawable()
 {
+    ZoneScoped
     MSDrawableObject* obj = new MSDrawableObject(transform.GetPositionSf(),sf::Mouse::Button::Right,voxelGrid,-1.0f);
 
     //Get the physics object, then mark it as something that shouldn't be cleared up (it's being moved)
@@ -67,6 +69,7 @@ void MarchingSquaresObject::Render(sf::RenderWindow* window)
 
 std::vector<MarchingSquaresObject*> MarchingSquaresObject::Separate()
 {
+    ZoneScoped
     std::vector<MarchingSquaresObject*> objects;
     voxelGrid->AddBorder(-1);
     std::vector<VoxelGrid*> subgrids = voxelGrid->GetSubgrids();
@@ -86,6 +89,7 @@ std::vector<MarchingSquaresObject*> MarchingSquaresObject::Separate()
         objects.push_back(newObj);
         newObj->SetGrid(subgrids.at(i));
         newObj->SetDynamic(isDynamic);
+        newObj->SetTransform(transform);
         //newObj->Init();
     }
 
@@ -96,6 +100,7 @@ int MarchingSquaresObject::GetTriangleCount() {return triangles.size();}
 
 void MarchingSquaresObject::Generate(bool dynamic)
 {
+    ZoneScopedN("Generate MS")
     voxelGrid->AddBorder(-1.0f);
 
     //Set the voxel grid x and y to 0, simplifies calculating if mouse is over object
@@ -119,6 +124,7 @@ void MarchingSquaresObject::Generate(bool dynamic)
     physicsBuilder.SetDynamic(dynamic);
 
     triangles.clear();
+
     for(int y=0;y<height - 1; ++y)
     {
         for(int x=0;x<width - 1; ++x)

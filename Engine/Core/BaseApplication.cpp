@@ -22,16 +22,16 @@ void BaseApplication::Gameloop()
         FrameMark;
 
         {
-            ZoneScopedN("TimerUpdate")
+            ZoneScopedN("TimerUpdate");
             Timer::Update();
         }
 
         {
-            ZoneScopedN("WindowPoll")
+            ZoneScopedN("WindowPoll");
             PollEvents();
         }
         {
-            ZoneScopedN("Input")
+            ZoneScopedN("Input");
             Input();
         }
 
@@ -39,25 +39,25 @@ void BaseApplication::Gameloop()
         PhysicsWorld::UpdateWorld();
 
         {
-            ZoneScopedN("Update")
+            ZoneScopedN("Update");
             Update();
         }
 
         //Pre-render
         {
-            ZoneScopedN("Prerender")
+            ZoneScopedN("Prerender");
             window.clear(clearColour);
             window.setView(camera.getView());
         }
 
         {
-            ZoneScopedN("Render")
+            ZoneScopedN("Render");
             Render();
         }
 
         //Post-render
         {
-            ZoneScopedN("Window Update")
+            ZoneScopedN("Window Update");
             window.display();
         }
     }

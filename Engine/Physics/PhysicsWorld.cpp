@@ -23,7 +23,7 @@ b2WorldId PhysicsWorld::GetWorldId()
 
 void PhysicsWorld::UpdateWorld()
 {
-    ZoneScopedN("PhysicsUpdate")
-    float deltaTime = Timer::getDeltaTime();
+    ZoneScoped;
+    float deltaTime = std::min(Timer::getDeltaTime(),0.016f);
     b2World_Step(worldId,deltaTime,4);
 }
