@@ -43,8 +43,18 @@ void MarchingSquaresPhysics::MSPhysicsBuilder::Build()
         };
 
 
-        b2Hull hull = b2ComputeHull(points,3);
-        b2Polygon polygon = b2MakePolygon(&hull,0);
+        b2Hull hull;
+        b2Polygon polygon;
+
+
+        {
+            ZoneScopedN("ComputeHull")
+            hull = b2ComputeHull(points,3);
+        }
+        {
+            ZoneScopedN("MakePolygon")
+            polygon = b2MakePolygon(&hull,0);
+        }
 
         object->shapes.push_back(b2CreatePolygonShape(object->bodyId,&shapeDef,&polygon));
     }
