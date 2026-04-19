@@ -56,10 +56,11 @@ void MarchingSquaresPhysics::MSPhysicsBuilder::Build()
             polygon = b2MakePolygon(&hull,0);
         }
 
-        object->shapes.push_back(b2CreatePolygonShape(object->bodyId,&shapeDef,&polygon));
+        {
+            ZoneScopedN("CreatePolygonShape")
+            object->shapes.push_back(b2CreatePolygonShape(object->bodyId,&shapeDef,&polygon));
+        }
     }
-
-    std::cout<<"Triangle count"<<triangles.size()<<std::endl;
 }
 
 MarchingSquaresPhysics::MSPhysicsBuilder::MSPhysicsBuilder(MarchingSquaresPhysics* object):object(object),isDynamic(false) {}
