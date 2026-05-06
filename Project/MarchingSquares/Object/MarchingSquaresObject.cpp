@@ -178,7 +178,8 @@ void MarchingSquaresObject::Generate(bool dynamic)
 
                 triangles.push_back(triangle);
                 graphicsBuilder.AddTriangle(triangle);
-                physicsBuilder.AddTriangle(triangle);
+                //physicsBuilder.AddTriangle(triangle);
+                if(index!=15){ physicsBuilder.AddTriangle(triangle); }
             }
         }
     }

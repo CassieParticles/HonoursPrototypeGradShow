@@ -35,8 +35,8 @@ void MarchingSquaresRenderable::MSRenderableBuilder::Build()
         renderable->triangles[i * 3 + 0].position = triangles[i].A;
         renderable->triangles[i * 3 + 1].position = triangles[i].B;
         renderable->triangles[i * 3 + 2].position = triangles[i].C;
-        renderable->triangles[i * 3 + 0].color = sf::Color::Blue;
-        renderable->triangles[i * 3 + 1].color = sf::Color::Blue;
+        renderable->triangles[i * 3 + 0].color = sf::Color::Red;
+        renderable->triangles[i * 3 + 1].color = sf::Color::Green;
         renderable->triangles[i * 3 + 2].color = sf::Color::Blue;
     }
 }
