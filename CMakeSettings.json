@@ -19,33 +19,6 @@
             "buildCommandArgs": "",
             "ctestCommandArgs": "",
             "inheritEnvironments": [ "msvc_x64_x64" ]
-        },
-        {
-            "name": "x64-Debug-NoProfiler",
-            "generator": "Ninja",
-            "configurationType": "Debug",
-            "buildRoot": "${projectDir}\\out\\build\\${name}",
-            "installRoot": "${projectDir}\\out\\install\\${name}",
-            "buildCommandArgs": "",
-            "ctestCommandArgs": "",
-            "inheritEnvironments": [ "msvc_x64_x64" ],
-            "variables": [
-                {
-                    "name": "TRACY_ENABLE",
-                    "value": "False",
-                    "type": "BOOL"
-                }
-            ]
-        },
-        {
-            "name": "x64-Release-NoProfiler",
-            "generator": "Ninja",
-            "configurationType": "Release",
-            "buildRoot": "${projectDir}\\out\\build\\${name}",
-            "installRoot": "${projectDir}\\out\\install\\${name}",
-            "buildCommandArgs": "",
-            "ctestCommandArgs": "",
-            "inheritEnvironments": [ "msvc_x64_x64" ]
         }
     ]
 }

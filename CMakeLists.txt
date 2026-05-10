@@ -33,7 +33,8 @@ add_executable(HonoursPrototype main.cpp
         Project/MarchingSquares/Drawable/MSDrawableObject.h
         Project/CmdVarPass.cpp
         Project/CmdVarPass.h
-)
+        Project/MarchingSquares/Drawable/MSDrawableRenderable.cpp
+        Project/MarchingSquares/Drawable/MSDrawableRenderable.h)
 
 add_subdirectory(Engine)
 target_include_directories(HonoursPrototype PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Engine)
