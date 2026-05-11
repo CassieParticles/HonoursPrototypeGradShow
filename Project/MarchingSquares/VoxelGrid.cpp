@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <tracy/Tracy.hpp>
 
-VoxelGrid::VoxelGrid(): width(1),height(1),x(0),y(0),voxelGrid(new float[1]), angle(0)
+VoxelGrid::VoxelGrid(int x, int y): width(1),height(1),x(x),y(y),voxelGrid(new float[1]), angle(0)
 {
     voxelGrid[0] = -1.0f;
 }
@@ -140,7 +140,8 @@ VoxelGrid* VoxelGrid::CreateSubgrid(int x, int y, float* gridCopy)
 }
 
 float *VoxelGrid::GetData() const {return voxelGrid;}
-float VoxelGrid::getVoxel(int x, int y) const {return voxelGrid[y * width + x];}
+float VoxelGrid::getVoxel(int x, int y) const {
+    return voxelGrid[y * width + x];}
 float& VoxelGrid::operator[](int index) const {return voxelGrid[index];}
 
 void VoxelGrid::PrintValues()
@@ -183,56 +184,93 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
     sf::Vector2i lowerBound = sf::Vector2i{x,y};
     sf::Vector2i upperBound = sf::Vector2i{x+width,y+height};
 
-    //Add to the left
-    if(position.x - radius < lowerBound.x)
+    //If value is -ve, don't ned to add new stuff
+    if (value > 0.0f)
     {
-        for(int i=0;i<-(position.x - radius - lowerBound.x);i++)
+        //Add to the left
+        if (position.x - radius < lowerBound.x)
         {
-            AddColumnLeft(-1.0f);
+            for (int i = 0; i < -(position.x - radius - lowerBound.x); i++)
+            {
+                AddColumnLeft(-1.0f);
+            }
         }
-    }
-    //Add to the right
-    if(position.x + radius > upperBound.x)
-    {
-        for(int i=0;i<position.x + radius - lowerBound.x;i++)
+        //Add to the right
+        if (position.x + radius > upperBound.x)
         {
-            AddColumnRight(-1.0f);
+            for (int i = 0; i < position.x + radius - lowerBound.x; i++)
+            {
+                AddColumnRight(-1.0f);
+            }
         }
-    }
-    //Add to the top
-    if(position.y - radius < lowerBound.y)
-    {
-        for(int i=0;i<-(position.y - radius - lowerBound.y);i++)
+        //Add to the top
+        if (position.y - radius < lowerBound.y)
         {
-            AddRowTop(-1.0f);
+            for (int i = 0; i < -(position.y - radius - lowerBound.y); i++)
+            {
+                AddRowTop(-1.0f);
+            }
         }
-    }
-    //Add to the bottom
-    if(position.y +  radius > upperBound.y)
-    {
-        for(int i=0;i<position.y + radius - lowerBound.y;i++)
+        //Add to the bottom
+        if (position.y + radius > upperBound.y)
         {
-            AddRowBottom(-1.0f);
+            for (int i = 0; i < position.y + radius - lowerBound.y; i++)
+            {
+                AddRowBottom(-1.0f);
+            }
         }
     }
 
-    for(int y=-radius;y<radius;y++)
+    for(int y = -radius - 1;y < radius - 1;y++)
     {
-        for(int x=-radius;x<radius;x++)
+        for(int x = -radius + 1;x < radius + 1;x++)
         {
-            float distanceSqr = ((x * x) + (y * y)) / (radius * radius);
+            //Modify the value
+            float distanceSqr = getScalar(x,y,radius);
             if(distanceSqr > 1){continue;}
             float scalar = 1 - distanceSqr;
 
-            int index = (y + static_cast<int>(position.y) - this->y) * width + (x + static_cast<int>(position.x) - this->x);
+            sf::Vector2i pos{ x + static_cast<int>(position.x) - this->x,y + static_cast<int>(position.y) - this->y};
+            int index = (pos.y * width + pos.x);
+            if (pos.x >= width || pos.x < 0 || pos.y >= height || pos.y < 0)
+            {
+                continue;
+            }
 
             voxelGrid[index] = std::clamp(voxelGrid[index] + value * scalar,-1.0f,1.0f);
             if(abs(voxelGrid[index]) < 0.05f)
             {
                 voxelGrid[index] = signbit(voxelGrid[index]) ? -0.05f: 0.05f;
             }
+
+            //Add the surronding cells to the stack
+            //If any corner of cell would be modified, add ( [x,y] is considered TL corner) 
+            float corner1 = getScalar(x + 1, y, radius);
+            float corner2 = getScalar(x + 1, y + 1, radius);
+            float corner3 = getScalar(x, y + 1, radius);
+
+            modifiedCells.push({ x + static_cast<int>(position.x) - this->x,y + static_cast<int>(position.y) - this->y });
         }
     }
+}
+
+bool VoxelGrid::getResize()
+{
+    bool resize = hasBeenResized;
+    hasBeenResized = false;
+    return resize;
+}
+
+sf::Vector2i VoxelGrid::getModifiedCell()
+{
+    if (modifiedCells.empty())
+    {
+        return { -1,-1 };
+    }
+
+    sf::Vector2i val = modifiedCells.top();
+    modifiedCells.pop();
+    return val;
 }
 
 void VoxelGrid::AddColumnLeft(float defaultValue)
@@ -254,6 +292,7 @@ void VoxelGrid::AddColumnLeft(float defaultValue)
 
     width++;
     x--;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddColumnRight(float defaultValue)
@@ -274,6 +313,7 @@ void VoxelGrid::AddColumnRight(float defaultValue)
     voxelGrid = newArr;
 
     width++;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddRowTop(float defaultValue)
@@ -297,6 +337,7 @@ void VoxelGrid::AddRowTop(float defaultValue)
 
     height++;
     y--;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddRowBottom(float defaultValue)
@@ -319,4 +360,5 @@ void VoxelGrid::AddRowBottom(float defaultValue)
     voxelGrid = newArr;
 
     height++;
+    hasBeenResized = true;
 }
