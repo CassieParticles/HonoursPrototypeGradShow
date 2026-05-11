@@ -2,6 +2,7 @@
 #include <GameObjects/GameObject.h>
 
 #include "../VoxelGrid.h"
+#include "MSDrawableRenderable.h"
 
 
 
@@ -17,6 +18,8 @@ public:
 
     void Update() override;
 
+    void Render(sf::RenderWindow* window) override;
+
     void AddPhysicsStore(b2BodyId bodyId);
 
     bool isComplete() const { return complete; }
@@ -25,6 +28,8 @@ public:
 private:
     VoxelGrid* grid;
     sf::Mouse::Button buttonListening;
+
+    MSDrawableRenderable renderable;
 
     b2BodyId physicsStore;
 

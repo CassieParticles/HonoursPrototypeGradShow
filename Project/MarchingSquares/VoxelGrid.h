@@ -6,7 +6,7 @@
 class VoxelGrid
 {
 public:
-    VoxelGrid();
+    VoxelGrid(int x = 0, int y = 0);
     VoxelGrid(float* data, int width, int height, int x=0, int y=0);
 
     ~VoxelGrid();

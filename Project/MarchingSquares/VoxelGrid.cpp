@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <tracy/Tracy.hpp>
 
-VoxelGrid::VoxelGrid(): width(1),height(1),x(0),y(0),voxelGrid(new float[1]), angle(0)
+VoxelGrid::VoxelGrid(int x, int y): width(1),height(1),x(x),y(y),voxelGrid(new float[1]), angle(0)
 {
     voxelGrid[0] = -1.0f;
 }
@@ -140,7 +140,8 @@ VoxelGrid* VoxelGrid::CreateSubgrid(int x, int y, float* gridCopy)
 }
 
 float *VoxelGrid::GetData() const {return voxelGrid;}
-float VoxelGrid::getVoxel(int x, int y) const {return voxelGrid[y * width + x];}
+float VoxelGrid::getVoxel(int x, int y) const {
+    return voxelGrid[y * width + x];}
 float& VoxelGrid::operator[](int index) const {return voxelGrid[index];}
 
 void VoxelGrid::PrintValues()
@@ -242,7 +243,7 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
 
             if(corner1 > 1 || corner2 > 1 || corner3 > 1)
             {
-                modifiedCells.push({ x,y });
+                modifiedCells.push({ x + static_cast<int>(position.x) - this->x,y + static_cast<int>(position.y) - this->y });
             }
         }
     }
