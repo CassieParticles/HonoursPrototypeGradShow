@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.29)
 
 add_library(HonoursFramework STATIC
         Core/BaseApplication.cpp
@@ -46,15 +46,16 @@ FetchContent_MakeAvailable (tracy)
 
 target_link_libraries(HonoursFramework PUBLIC TracyClient)
 
+FetchContent_Declare (
+    Box2D
+    GIT_REPOSITORY https://github.com/erincatto/box2d
+    GIT_TAG v3.1.1
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable (Box2D)
 
-#Box2D
-add_library(Box2D STATIC IMPORTED GLOBAL)
+target_link_libraries(HonoursFramework PUBLIC box2d::box2d)
 
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-        set_property(TARGET Box2D PROPERTY IMPORTED_LOCATION "${CMAKE_CURRENT_LIST_DIR}/libs/box2d/debug/box2dd.lib")
-else()
-        set_property(TARGET Box2D PROPERTY IMPORTED_LOCATION "${CMAKE_CURRENT_LIST_DIR}/libs/box2d/release/box2d.lib")
-endif()
 
-target_link_libraries(HonoursFramework PUBLIC Box2D)
 target_include_directories(HonoursFramework PUBLIC libs/includes)
