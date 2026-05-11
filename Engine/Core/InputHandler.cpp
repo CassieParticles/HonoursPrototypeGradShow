@@ -43,26 +43,26 @@ void InputHandler::PollEvents()
         if(event->is<sf::Event::KeyPressed>())
         {
             int code = static_cast<int>(event->getIf<sf::Event::KeyPressed>()->code);
-            if (code == -1) { return; }
+            if (code == -1) { continue; }
             keys.at(code) = true;
         }
         if(event->is<sf::Event::KeyReleased>())
         {
             int code = static_cast<int>(event->getIf<sf::Event::KeyReleased>()->code);
-            if (code == -1) { return; }
+            if (code == -1) { continue; }
             keys.at(code) = false;
         }
         //Mouse buttons pressed/released
         if(event->is<sf::Event::MouseButtonPressed>())
         {
             int button = static_cast<int>(event->getIf<sf::Event::MouseButtonPressed>()->button);
-            if (button == -1) { return; }
+            if (button == -1) { continue; }
             mouseButtons.at(button) = true;
         }
         if(event->is<sf::Event::MouseButtonReleased>())
         {
             int button = static_cast<int>(event->getIf<sf::Event::MouseButtonReleased>()->button);
-            if (button == -1) { return; }
+            if (button == -1) { continue; }
             mouseButtons.at(button) = false;
         }
         if(event->is<sf::Event::MouseWheelScrolled>())
