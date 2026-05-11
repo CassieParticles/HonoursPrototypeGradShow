@@ -55,7 +55,14 @@ void MSDrawableObject::TakeInput(InputHandler* input)
         complete = true;
         return;
     }
+
     grid->AddValueCircle(input->getMousePositionWorld(),drawRadius,value);
+
+    //Handle grid updates from drawing
+    if (grid->getResize())
+    {
+        std::cout << "Grid has been resized!"<<std::endl;
+    }
 }
 
 void MSDrawableObject::Update()

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <stack>
 #include <SFML/Graphics.hpp>
 
 class VoxelGrid
@@ -35,6 +36,9 @@ public:
     void AddBorder(float defaultValue = 0.0f);
 
     void AddValueCircle(sf::Vector2f position, float radius, float value);
+
+    //Get if the grid has been resized since last check (then set it to false)
+    bool getResize();
 private:
     void AddColumnLeft(float defaultValue = 0.0f);
     void AddColumnRight(float defaultValue = 0.0f);
@@ -55,4 +59,7 @@ private:
 
     //Rotation of the grid
     float angle;
+
+    //Handling updating of grid
+    bool hasBeenResized;
 };

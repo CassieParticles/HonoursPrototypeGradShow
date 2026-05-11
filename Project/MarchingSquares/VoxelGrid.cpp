@@ -235,6 +235,13 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
     }
 }
 
+bool VoxelGrid::getResize()
+{
+    bool resize = hasBeenResized;
+    hasBeenResized = false;
+    return resize;
+}
+
 void VoxelGrid::AddColumnLeft(float defaultValue)
 {
     ZoneScoped
@@ -254,6 +261,7 @@ void VoxelGrid::AddColumnLeft(float defaultValue)
 
     width++;
     x--;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddColumnRight(float defaultValue)
@@ -274,6 +282,7 @@ void VoxelGrid::AddColumnRight(float defaultValue)
     voxelGrid = newArr;
 
     width++;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddRowTop(float defaultValue)
@@ -297,6 +306,7 @@ void VoxelGrid::AddRowTop(float defaultValue)
 
     height++;
     y--;
+    hasBeenResized = true;
 }
 
 void VoxelGrid::AddRowBottom(float defaultValue)
@@ -319,4 +329,5 @@ void VoxelGrid::AddRowBottom(float defaultValue)
     voxelGrid = newArr;
 
     height++;
+    hasBeenResized = true;
 }
