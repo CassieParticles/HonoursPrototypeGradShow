@@ -221,9 +221,9 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
         }
     }
 
-    for(int y=-radius - 1;y<radius - 1;y++)
+    for(int y = -radius - 1;y < radius - 1;y++)
     {
-        for(int x=-radius + 1;x<radius + 1;x++)
+        for(int x = -radius + 1;x < radius + 1;x++)
         {
             //Modify the value
             float distanceSqr = getScalar(x,y,radius);
