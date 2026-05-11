@@ -249,10 +249,7 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
             float corner2 = getScalar(x + 1, y + 1, radius);
             float corner3 = getScalar(x, y + 1, radius);
 
-            if(distanceSqr > 1 || corner1 > 1 || corner2 > 1 || corner3 > 1)
-            {
-                modifiedCells.push({ x + static_cast<int>(position.x) - this->x,y + static_cast<int>(position.y) - this->y });
-            }
+            modifiedCells.push({ x + static_cast<int>(position.x) - this->x,y + static_cast<int>(position.y) - this->y });
         }
     }
 }
