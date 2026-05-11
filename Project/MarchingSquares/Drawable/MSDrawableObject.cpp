@@ -57,17 +57,20 @@ void MSDrawableObject::TakeInput(InputHandler* input)
     }
 
     grid->AddValueCircle(input->getMousePositionWorld(),drawRadius,value);
-
-    //Handle grid updates from drawing
-    if (grid->getResize())
-    {
-        std::cout << "Grid has been resized!"<<std::endl;
-    }
 }
 
 void MSDrawableObject::Update()
 {
+    if (grid->getResize())
+    {
+        std::cout << "Grid resized" << std::endl;
+    }
 
+    sf::Vector2i modifiedCell;
+    while ((modifiedCell = grid->getModifiedCell()) != sf::Vector2i(-1,-1))
+    {
+        std::cout << "Grid modified at: "<<modifiedCell.x << ","<<modifiedCell.y << std::endl;
+    }
 }
 
 void MSDrawableObject::AddPhysicsStore(b2BodyId bodyId)

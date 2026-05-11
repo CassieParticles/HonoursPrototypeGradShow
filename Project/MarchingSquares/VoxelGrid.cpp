@@ -216,11 +216,12 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
         }
     }
 
-    for(int y=-radius;y<radius;y++)
+    for(int y=-radius - 1;y<radius - 1;y++)
     {
-        for(int x=-radius;x<radius;x++)
+        for(int x=-radius + 1;x<radius + 1;x++)
         {
-            float distanceSqr = ((x * x) + (y * y)) / (radius * radius);
+            //Modify the value
+            float distanceSqr = getScalar(x,y,radius);
             if(distanceSqr > 1){continue;}
             float scalar = 1 - distanceSqr;
 
@@ -231,6 +232,18 @@ void VoxelGrid::AddValueCircle(sf::Vector2f position, float radius, float value)
             {
                 voxelGrid[index] = signbit(voxelGrid[index]) ? -0.05f: 0.05f;
             }
+
+            //Add the surronding cells to the stack
+
+            //If any corner of cell would be modified, add ( [x,y] is considered TL corner) 
+            float corner1 = getScalar(x + 1, y, radius);
+            float corner2 = getScalar(x + 1, y + 1, radius);
+            float corner3 = getScalar(x, y + 1, radius);
+
+            if(corner1 > 1 || corner2 > 1 || corner3 > 1)
+            {
+                modifiedCells.push({ x,y });
+            }
         }
     }
 }
@@ -240,6 +253,18 @@ bool VoxelGrid::getResize()
     bool resize = hasBeenResized;
     hasBeenResized = false;
     return resize;
+}
+
+sf::Vector2i VoxelGrid::getModifiedCell()
+{
+    if (modifiedCells.empty())
+    {
+        return { -1,-1 };
+    }
+
+    sf::Vector2i val = modifiedCells.top();
+    modifiedCells.pop();
+    return val;
 }
 
 void VoxelGrid::AddColumnLeft(float defaultValue)

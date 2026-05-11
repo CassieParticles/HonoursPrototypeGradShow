@@ -39,6 +39,8 @@ public:
 
     //Get if the grid has been resized since last check (then set it to false)
     bool getResize();
+    //Get the cell that has been modified(if it exists), returns -1, -1 if none left
+    sf::Vector2i getModifiedCell();
 private:
     void AddColumnLeft(float defaultValue = 0.0f);
     void AddColumnRight(float defaultValue = 0.0f);
@@ -46,6 +48,8 @@ private:
     void AddRowBottom(float defaultValue = 0.0f);
 
     VoxelGrid* CreateSubgrid(int x, int y, float* gridCopy);
+
+    const inline float getScalar(float x, float y, float radius) { return (x * x + y * y) / (radius * radius); }
 
     float* voxelGrid;
 
@@ -62,4 +66,6 @@ private:
 
     //Handling updating of grid
     bool hasBeenResized;
+
+    std::stack<sf::Vector2i> modifiedCells;
 };
