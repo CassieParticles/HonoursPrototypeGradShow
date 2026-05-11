@@ -1,13 +1,22 @@
 #include "MSDrawableRenderable.h"
 
+#include <Core/Timer.h>
+
 MSDrawableRenderable::MSDrawableRenderable(Transform* transform):BaseRenderable(transform)
 {
 	array.setPrimitiveType(sf::PrimitiveType::Triangles);
+    timestep = 0;
 }
 
 void MSDrawableRenderable::Render(sf::RenderWindow* window)
 {
-    window->draw(array);
+    state.transform = sf::Transform();
+    state.transform.translate(sf::Vector2f(static_cast<float>(grid->getX()), static_cast<float>(grid->getY())));
+    //state.transform.rotate(sf::radians(timestep));
+    state.transform.rotate(sf::radians(grid->getAngle()));
+    timestep += Timer::getDeltaTime();
+
+    window->draw(array,state);
 }
 
 void MSDrawableRenderable::SetGrid(VoxelGrid* grid)
@@ -37,10 +46,10 @@ void MSDrawableRenderable::UpdateCell(sf::Vector2i cell)
 
     //Get the vertex position of each corner
     sf::Vector2f vertices[8];
-    vertices[0] = sf::Vector2f(static_cast<float>(cell.x + grid->getX()), static_cast<float>(cell.y + grid->getY()));
-    vertices[2] = sf::Vector2f(static_cast<float>(cell.x + 1 + grid->getX()), static_cast<float>(cell.y + grid->getY()));
-    vertices[4] = sf::Vector2f(static_cast<float>(cell.x + 1 + grid->getX()), static_cast<float>(cell.y + 1 + grid->getY()));
-    vertices[6] = sf::Vector2f(static_cast<float>(cell.x + grid->getX()), static_cast<float>(cell.y + 1 + grid->getY()));
+    vertices[0] = sf::Vector2f(static_cast<float>(cell.x), static_cast<float>(cell.y));
+    vertices[2] = sf::Vector2f(static_cast<float>(cell.x + 1), static_cast<float>(cell.y));
+    vertices[4] = sf::Vector2f(static_cast<float>(cell.x + 1), static_cast<float>(cell.y + 1));
+    vertices[6] = sf::Vector2f(static_cast<float>(cell.x), static_cast<float>(cell.y + 1));
 
     //Calculate the vertex position of each midpoint (lerp between positions)
     vertices[1] = findMidpointX(vertices[0], vertices[2], cornerValues[0], cornerValues[1]);

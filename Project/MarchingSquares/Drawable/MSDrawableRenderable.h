@@ -15,7 +15,10 @@ public:
 	void Resize();
 private:
 	sf::VertexArray array;
+    sf::RenderStates state;
 	VoxelGrid* grid;
+
+    float timestep;
 
     inline int getIndexHelper(int x, int y, int triangle, int vertex) {
         //index = Cell location + triangle offset + index offset [(y * width + x) * 12 + tri * 3 + vertex]
